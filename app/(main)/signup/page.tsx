@@ -132,10 +132,10 @@ const MultiStepSignUp: React.FC = () => {
                 Next
               </Button>
             ) : (
-              <Link href="/">
+              <Link className='w-full sm:w-1/2' href="/">
               <Button
                 type="submit"
-                className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-1/2"
+                className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-full"
               >
                 Sign Up
               </Button>

@@ -73,7 +73,7 @@ const Page = () => {
             </p>
 
             <p className='mt-3 text-sm text-gray-600'>
-              <a href="/forgot-password" className='text-teal-600 hover:text-teal-700 transition duration-300'>Forgot Password?</a>
+              <a href="/forgetPassword" className='text-teal-600 hover:text-teal-700 transition duration-300'>Forgot Password?</a>
             </p>
           </form>
         </motion.div>
