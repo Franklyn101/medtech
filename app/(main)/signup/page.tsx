@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from "next/link"
 
 const steps = [
   [
@@ -29,28 +30,38 @@ type FormData = {
   [key: string]: string;
 };
 
+type FormErrors = {
+  [key: string]: boolean;
+};
+
 const MultiStepSignUp: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
-
-  // Set the default value for the 'dob' field to today's date
   const [formData, setFormData] = useState<FormData>({
-    dob: new Date().toISOString().split('T')[0], // Default to today's date (ISO format)
+    dob: new Date().toISOString().split('T')[0], // today's date
   });
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: false })); // clear error when user types
   };
 
   const validateStep = (step: number): boolean => {
-    // Check if all fields in the current step are filled
-    return steps[step].every(({ name }) => formData[name] && formData[name].trim() !== '');
+    const newErrors: FormErrors = {};
+    steps[step].forEach(({ name }) => {
+      if (!formData[name] || formData[name].trim() === '') {
+        newErrors[name] = true;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
       setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
-    } else {
-      alert('Please fill in all fields before proceeding.');
     }
   };
 
@@ -58,7 +69,9 @@ const MultiStepSignUp: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    if (validateStep(currentStep)) {
+      console.log('Form submitted:', formData);
+    }
   };
 
   return (
@@ -89,15 +102,18 @@ const MultiStepSignUp: React.FC = () => {
                     placeholder={label}
                     value={formData[name] || ''}
                     onChange={handleChange}
-                    required
-                    className="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    className={`px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:outline-none 
+                      ${errors[name] ? 'border-red-500 focus:ring-red-300' : 'border-gray-300 focus:ring-teal-500'}`}
                   />
+                  {errors[name] && (
+                    <span className="text-red-600 text-sm mt-1">*</span>
+                  )}
                 </div>
               ))}
             </motion.div>
           </AnimatePresence>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center mt-10 gap-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center mt-10 gap-4">
             {currentStep > 0 && (
               <Button
                 type="button"
@@ -116,12 +132,14 @@ const MultiStepSignUp: React.FC = () => {
                 Next
               </Button>
             ) : (
+              <Link href="/">
               <Button
                 type="submit"
                 className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-1/2"
               >
                 Sign Up
               </Button>
+              </Link>
             )}
           </div>
         </form>

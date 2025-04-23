@@ -4,6 +4,8 @@ import React from 'react'
 import Image from "next/image"
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
+import Link from "next/link"
+
 
 const Page = () => {
   return (
@@ -60,10 +62,12 @@ const Page = () => {
               placeholder="Password" 
               className='mb-6 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600'
             />
+   
+                <Link href="/" className="w-full">
+                    <Button  className='w-full py-3 transition duration-300'>Login</Button>
+                  </Link>
 
-            <a className='w-full' href="/">
-              <Button className='w-full py-3 transition duration-300'>Login</Button>
-            </a>
+            
 
             <p className='mt-6 text-sm text-gray-600'>
               Don't have an account? 
