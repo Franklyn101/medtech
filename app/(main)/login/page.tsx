@@ -6,12 +6,11 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Link from "next/link"
 
-
 const Page = () => {
   return (
     <div className='min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10'>
       <motion.div 
-        className='flex flex-col lg:flex-row items-center justify-center gap-10  lg:gap-0 w-full max-w-5xl'
+        className='flex flex-col lg:flex-row w-full max-w-6xl bg-white rounded-xl overflow-hidden shadow-lg'
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.5 }}
@@ -19,29 +18,30 @@ const Page = () => {
 
         {/* Image Section */}
         <motion.div 
-          className='w-full lg:w-1/2 flex justify-center'
+          className='w-full lg:w-1/2 h-96 lg:h-auto flex justify-center items-center bg-teal-50'
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
           <Image
-            src="/placeholder.svg"
+            src="https://i.pinimg.com/736x/28/b6/2f/28b62f0a6dc4bdea189a7bcd46d4d874.jpg"
             alt="Healthcare professionals in a meeting"
-            height={450}
-            width={400}
-            className="object-cover rounded-lg w-full max-w-xs lg:max-w-[400px] lg:h-[400px]"
+            height={500}
+            width={500}
+            className="object-contain h-full w-full p-6"
+            objectFit='contain'
             priority
           />
         </motion.div>
 
         {/* Form Section */}
         <motion.div 
-          className='w-full max-w-sm lg:w-[400px] bg-white border border-teal-600 shadow-lg rounded-lg flex items-center justify-center'
+          className='w-full lg:w-1/2 flex items-center justify-center px-8 py-10'
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <form className='flex flex-col items-center w-full px-8 py-6'>
+          <form className='w-full max-w-sm'>
             <motion.h2 
               className='text-2xl font-semibold text-teal-600 mb-4'
               initial={{ opacity: 0 }}
@@ -62,12 +62,10 @@ const Page = () => {
               placeholder="Password" 
               className='mb-6 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600'
             />
-   
-                <Link href="/" className="w-full">
-                    <Button  className='w-full py-3 transition duration-300'>Login</Button>
-                  </Link>
 
-            
+            <Link href="/" className="w-full">
+              <Button className='w-full py-3 transition duration-300'>Login</Button>
+            </Link>
 
             <p className='mt-6 text-sm text-gray-600'>
               Don't have an account? 
