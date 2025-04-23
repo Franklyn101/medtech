@@ -2,24 +2,27 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from "next/link"
 
 const steps = [
   [
-    { label: 'First Name', name: 'firstName' },
-    { label: 'Last Name', name: 'lastName' },
-    { label: 'Email', name: 'email' },
-    { label: 'Phone Number', name: 'phone' },
+    { label: 'First Name', name: 'firstName', placeholder: 'First Name' },
+    { label: 'Last Name', name: 'lastName', placeholder: 'Last Name' },
+    { label: 'Date of Birth', name: 'dob', type: 'date', placeholder: 'Date of Birth' },
+    { label: 'Country', name: 'country', placeholder: 'Country' },
   ],
   [
-    { label: 'Date of Birth', name: 'dob' },
-    { label: 'Address', name: 'address' },
-    { label: 'City', name: 'city' },
-    { label: 'State', name: 'state' },
+    { label: 'User Name', name: 'UserName', placeholder: 'User Name' },
+    { label: 'Address', name: 'address', placeholder: 'Address' },
+    { label: 'City', name: 'city', placeholder: 'City' },
+    { label: 'State', name: 'state', placeholder: 'State' },
   ],
   [
-    { label: 'Country', name: 'country' },
-    { label: 'Password', name: 'password', type: 'password' },
-    { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
+    { label: 'Email', name: 'email', placeholder: 'Email' },
+    { label: 'Phone Number', name: 'phone', placeholder: 'Phone Number' },
+    { label: 'Password', name: 'password', type: 'password', minLength: 8, placeholder: 'At least 8 characters' },
+    { label: 'Confirm Password', name: 'confirmPassword', type: 'password', minLength: 8, placeholder: 'At least 8 characters' },
   ]
 ];
 
@@ -27,53 +30,116 @@ type FormData = {
   [key: string]: string;
 };
 
+type FormErrors = {
+  [key: string]: boolean;
+};
+
 const MultiStepSignUp: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<FormData>({});
+  const [formData, setFormData] = useState<FormData>({
+    dob: new Date().toISOString().split('T')[0],
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: false }));
   };
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+  const validateStep = (step: number): boolean => {
+    const newErrors: FormErrors = {};
+    steps[step].forEach(({ name }) => {
+      if (!formData[name] || formData[name].trim() === '') {
+        newErrors[name] = true;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const nextStep = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+    }
+  };
+
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    if (validateStep(currentStep)) {
+      console.log('Form submitted:', formData);
+    }
   };
 
   return (
-    <div className='h-screen bg-gray-50 flex items-center justify-center'>
-      <div className='min-h-[550px] w-[500px] bg-white border border-teal-600 shadow-xl rounded-2xl p-8'>
-        <form className='space-y-6' onSubmit={handleSubmit}>
-          <div className='text-center'>
-            <h2 className='text-3xl font-bold text-teal-600 mb-2'>Sign Up</h2>
-            <p className='text-gray-600'>Step {currentStep + 1} of {steps.length}</p>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-gray-100 flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-teal-700">Create Your Account</h1>
+          <p className="text-sm sm:text-md text-gray-600">Step {currentStep + 1} of {steps.length}</p>
+        </div>
 
-          <div className='grid grid-cols-2 gap-4'>
-            {steps[currentStep].map(({ label, name, type = 'text' }) => (
-              <input
-                key={name}
-                type={type}
-                name={name}
-                placeholder={label}
-                value={formData[name] || ''}
-                onChange={handleChange}
-                className='p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600'
-              />
-            ))}
-          </div>
+        <form onSubmit={handleSubmit}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {steps[currentStep].map(({ label, placeholder, name, type = 'text' }) => (
+                <div key={name} className="flex flex-col">
+                  <label htmlFor={name} className="mb-1 text-sm text-gray-700 font-medium">{label}</label>
+                  <input
+                    type={type}
+                    name={name}
+                    id={name}
+                    placeholder={placeholder}
+                    value={formData[name] || ''}
+                    onChange={handleChange}
+                    className={`px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:outline-none 
+                      ${errors[name] ? 'border-red-500 focus:ring-red-300' : 'border-gray-300 focus:ring-teal-500'}`}
+                  />
+                  {errors[name] && (
+                    <span className="text-red-600 text-sm mt-1">*</span>
+                  )}
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
 
-          <div className='flex justify-center gap-10 items-center'>
+          <div className="flex flex-col sm:flex-row justify-center items-center mt-10 gap-4">
             {currentStep > 0 && (
-              <Button type='button' onClick={prevStep} className='w-[48%]'>Back</Button>
+              <Button
+                type="button"
+                onClick={prevStep}
+                className="bg-gray-200 text-gray-700 hover:bg-gray-300 w-full sm:w-1/2"
+              >
+                Back
+              </Button>
             )}
             {currentStep < steps.length - 1 ? (
-              <Button type='button' onClick={nextStep} className='w-[48%]'>Next</Button>
+              <Button
+                type="button"
+                onClick={nextStep}
+                className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-1/2"
+              >
+                Next
+              </Button>
             ) : (
-              <Button type='submit' className='w-[48%]'>Submit</Button>
+              <Link className='w-full sm:w-1/2' href="/">
+                <Button
+                  type="submit"
+                  className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-full"
+                >
+                  Sign Up
+                </Button>
+              </Link>
             )}
           </div>
         </form>
