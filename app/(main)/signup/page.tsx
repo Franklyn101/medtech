@@ -7,22 +7,22 @@ import Link from "next/link"
 
 const steps = [
   [
-    { label: 'First Name', name: 'firstName' },
-    { label: 'Last Name', name: 'lastName' },
-    { label: 'Date of Birth', name: 'dob', type: 'date' },
-    { label: 'Country', name: 'country' },
+    { label: 'First Name', name: 'firstName', placeholder: 'First Name' },
+    { label: 'Last Name', name: 'lastName', placeholder: 'Last Name' },
+    { label: 'Date of Birth', name: 'dob', type: 'date', placeholder: 'Date of Birth' },
+    { label: 'Country', name: 'country', placeholder: 'Country' },
   ],
   [
-    { label: 'User Name', name: 'UserName' },
-    { label: 'Address', name: 'address' },
-    { label: 'City', name: 'city' },
-    { label: 'State', name: 'state' },
+    { label: 'User Name', name: 'UserName', placeholder: 'User Name' },
+    { label: 'Address', name: 'address', placeholder: 'Address' },
+    { label: 'City', name: 'city', placeholder: 'City' },
+    { label: 'State', name: 'state', placeholder: 'State' },
   ],
   [
-    { label: 'Email', name: 'email' },
-    { label: 'Phone Number', name: 'phone' },
-    { label: 'Password', name: 'password', type: 'password' },
-    { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
+    { label: 'Email', name: 'email', placeholder: 'Email' },
+    { label: 'Phone Number', name: 'phone', placeholder: 'Phone Number' },
+    { label: 'Password', name: 'password', type: 'password', minLength: 8, placeholder: 'At least 8 characters' },
+    { label: 'Confirm Password', name: 'confirmPassword', type: 'password', minLength: 8, placeholder: 'At least 8 characters' },
   ]
 ];
 
@@ -37,14 +37,14 @@ type FormErrors = {
 const MultiStepSignUp: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>({
-    dob: new Date().toISOString().split('T')[0], // today's date
+    dob: new Date().toISOString().split('T')[0],
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: false })); // clear error when user types
+    setErrors((prev) => ({ ...prev, [name]: false }));
   };
 
   const validateStep = (step: number): boolean => {
@@ -92,14 +92,14 @@ const MultiStepSignUp: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
-              {steps[currentStep].map(({ label, name, type = 'text' }) => (
+              {steps[currentStep].map(({ label, placeholder, name, type = 'text' }) => (
                 <div key={name} className="flex flex-col">
                   <label htmlFor={name} className="mb-1 text-sm text-gray-700 font-medium">{label}</label>
                   <input
                     type={type}
                     name={name}
                     id={name}
-                    placeholder={label}
+                    placeholder={placeholder}
                     value={formData[name] || ''}
                     onChange={handleChange}
                     className={`px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:outline-none 
@@ -133,12 +133,12 @@ const MultiStepSignUp: React.FC = () => {
               </Button>
             ) : (
               <Link className='w-full sm:w-1/2' href="/">
-              <Button
-                type="submit"
-                className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-full"
-              >
-                Sign Up
-              </Button>
+                <Button
+                  type="submit"
+                  className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-full"
+                >
+                  Sign Up
+                </Button>
               </Link>
             )}
           </div>
