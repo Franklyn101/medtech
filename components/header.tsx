@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -38,7 +37,6 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
-    // Close mobile menu when route changes
     setIsMobileMenuOpen(false)
   }, [pathname])
 
@@ -96,6 +94,7 @@ export default function Header() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className={cn("bg-transparent", isScrolled ? "text-gray-800" : "text-white")}>
                     Events
@@ -114,6 +113,7 @@ export default function Header() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className={cn("bg-transparent", isScrolled ? "text-gray-800" : "text-white")}>
                     Programs
@@ -138,6 +138,51 @@ export default function Header() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className={cn("bg-transparent", isScrolled ? "text-gray-800" : "text-white")}>
+                    Communities
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4">
+                      <ListItem href="/communities/healthcare-professionals" title="Healthcare Professionals">
+                        Network for doctors, nurses, and medical practitioners
+                      </ListItem>
+                      <ListItem href="/communities/researchers" title="Researchers">
+                        Collaborative space for healthcare researchers
+                      </ListItem>
+                      <ListItem href="/communities/innovators" title="Innovators">
+                        Community for healthcare technology innovators
+                      </ListItem>
+                      <ListItem href="/communities/students" title="Students">
+                        Resources and networking for healthcare students
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className={cn("bg-transparent", isScrolled ? "text-gray-800" : "text-white")}>
+                    Products
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4">
+                      <ListItem href="/products/telemedicine-platform" title="Telemedicine Platform">
+                        Our flagship remote healthcare solution
+                      </ListItem>
+                      <ListItem href="/products/medical-records-system" title="Medical Records System">
+                        Secure and efficient digital record keeping
+                      </ListItem>
+                      <ListItem href="/products/health-education-apps" title="Health Education Apps">
+                        Mobile applications for health education
+                      </ListItem>
+                      <ListItem href="/products/diagnostic-tools" title="Diagnostic Tools">
+                        AI-powered diagnostic assistance
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className={cn("bg-transparent", isScrolled ? "text-gray-800" : "text-white")}>
                     Get Involved
@@ -156,6 +201,21 @@ export default function Header() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link href="/blog" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        "bg-transparent",
+                        isScrolled ? "text-gray-800" : "text-white",
+                      )}
+                    >
+                      Blog
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+
                 <NavigationMenuItem>
                   <Link href="/contact" legacyBehavior passHref>
                     <NavigationMenuLink
@@ -214,6 +274,9 @@ export default function Header() {
                   <Link href="/team" className="block py-2 text-gray-800 hover:text-teal-600">
                     Team Members
                   </Link>
+                  <Link href="/blog" className="block py-2 text-gray-800 hover:text-teal-600">
+                  Blog
+                </Link>
                 </div>
 
                 <div className="border-b pb-2">
@@ -245,6 +308,38 @@ export default function Header() {
                     className="block py-2 text-gray-800 hover:text-teal-600"
                   >
                     Climate Change Initiative
+                  </Link>
+                </div>
+
+                <div className="border-b pb-2">
+                  <p className="font-medium text-gray-500 mb-2">Communities</p>
+                  <Link href="/communities/healthcare-professionals" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Healthcare Professionals
+                  </Link>
+                  <Link href="/communities/researchers" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Researchers
+                  </Link>
+                  <Link href="/communities/innovators" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Innovators
+                  </Link>
+                  <Link href="/communities/students" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Students
+                  </Link>
+                </div>
+
+                <div className="border-b pb-2">
+                  <p className="font-medium text-gray-500 mb-2">Products</p>
+                  <Link href="/products/telemedicine-platform" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Telemedicine Platform
+                  </Link>
+                  <Link href="/products/medical-records-system" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Medical Records System
+                  </Link>
+                  <Link href="/products/health-education-apps" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Health Education Apps
+                  </Link>
+                  <Link href="/products/diagnostic-tools" className="block py-2 text-gray-800 hover:text-teal-600">
+                    Diagnostic Tools
                   </Link>
                 </div>
 
